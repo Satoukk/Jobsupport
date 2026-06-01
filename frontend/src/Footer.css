@@ -1,0 +1,20 @@
+.footer{
+    padding : 16px;
+    background : #ffffff;
+    border-top: 1px solid black;
+}
+
+.footer-nav{
+    display : flex;
+    justify-content: center;
+    gap :12px;
+}
+
+.footer-nav button{
+    padding :10px 18px;
+    border : none;
+    border-radius: #ffd6e8;
+    color: #303033;
+    font-weight: 700;
+    cursor : pointer;
+}
