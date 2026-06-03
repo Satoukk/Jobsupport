@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Jobsupport/backend/internal/database"
 	"Jobsupport/backend/internal/routes"
 
 	"github.com/gin-contrib/cors"
@@ -8,6 +9,8 @@ import (
 )
 
 func main() {
+
+	database.Connect()
 	r := gin.Default()
 
 	r.Use(cors.New(cors.Config{
