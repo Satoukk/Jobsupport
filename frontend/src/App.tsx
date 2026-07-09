@@ -1,11 +1,24 @@
-import { useState } from 'react'
+import { useState ,useEffect} from 'react'
+import { useNavigate } from "react-router-dom";
 import supo from "./assets/supo.png"
 import './App.css'
 import './Header.css'
 import './Footer.css'
 
 
+type Company = {
+  id: number;
+  company_name: string;
+  industry: string;
+  memo: string;
+  userid: number;
+};
+
 function App() {
+  const [companys,setCompanys] = useState<Company[]>([]);
+  const [err,setError] = useState("");
+  const [loading,setLoading] = useState(true);
+  //const [scheduleAts, setScheduleAts] = useState<string[]>([]);
   const [statusCount] = useState({
   entry:0,
   selection:0,
@@ -13,18 +26,47 @@ function App() {
   rejection:0,
 })
 
+  useEffect(()=>{
+    const fetchJob = async () => {
+      try {
+  
+          const userid = 1;
+          const res = await fetch(`http://localhost:8080/api/users/${userid}/companies`)
+          if(!res.ok){
+            throw new Error("データ取得に失敗しました")
+          }
+          const data: { companies: Company[] } = await res.json();
+          setCompanys(data.companies);
+      }
+      catch(err){
+          setError("エラーが発生しました");
+      } finally{
+        setLoading(false)
+      }
+    }
+    fetchJob();
+  },[])
+
+  if (loading) {
+    return <p>読み込み中...</p>;
+  }
+
+  if (err) {
+    return <p>{err}</p>;
+  }
+
   return (
     <>
     <Header/>
     <StatusCard/>
     <StatusSummary statusCount={statusCount}/>
-    <ListSchedule/>
+    <ListSchedule companys={companys}/>
     <Footer/>
     </>
   )
 }
 
-function Header(){
+export function Header(){
   return(
     <> 
     <header className="headerbody">
@@ -38,13 +80,14 @@ function Header(){
   )
 }
 
-function Footer(){
+export function Footer(){
+    const navigate = useNavigate();
   return(
     <>
      <footer className="footer">
       <nav className="footer-nav">
         <button>ホーム</button>
-        <button>企業</button>
+        <button onClick={()=>navigate("/companies")}>企業</button>
         <button>予定</button>
         <button>キャラ</button>
       </nav>
@@ -115,16 +158,20 @@ function StatusTitle({label,count}:{label:string,count:number}){
   )
 }
 
-function ListSchedule(){
-  const fetchhealth = async () =>{
-  const res = await fetch("http://localhost:8080/api/health")
-  const data = await res.json();
-  console.log(data);
-  }
+function ListSchedule({ companys }: { companys: Company[] }){
+  const scheduledCompanies = companys.filter((company) => company.company_name.trim());
+
   return(
     <>
     <strong>今後の予定</strong>
-    <button onClick={fetchhealth}>API検証</button>
+  <ul>
+    {scheduledCompanies.map((company) => (
+      <li key={company.id}>
+        {company.company_name}
+      </li>
+    ))}
+  </ul>
+
     </>
   )
 }

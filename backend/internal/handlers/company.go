@@ -11,11 +11,11 @@ import (
 
 func GetCompany(c *gin.Context) {
 	userId := c.Param("userId")
-	companies := []model.Company{}
+	company := []model.Company{}
 
 	if err := database.DB.
 		Where("user_id = ?", userId).
-		Find(&companies).Error; err != nil {
+		Find(&company).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "企業一覧の取得に失敗しました",
 		})
@@ -23,7 +23,7 @@ func GetCompany(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"companies": companies,
+		"companies": company,
 	})
 }
 
@@ -117,5 +117,38 @@ func DeleteCompany(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "企業を削除しました",
+	})
+}
+
+// 企業探し
+func SerchCompany(c *gin.Context) {
+
+	var req model.SerchName
+	var companies []model.Company
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(400, gin.H{
+			"message": "入力してください",
+		})
+	}
+
+	companyName := req.CompanyName
+
+	if err := database.DB.Where("company_name=?", companyName).
+		Find(&companies).Error; err != nil {
+		c.JSON(500, gin.H{
+			"error": "企業の取得に失敗しました",
+		})
+		return
+	}
+
+	if len(companies) == 0 {
+		c.JSON(201, gin.H{
+			"error": "条件に合う企業はありません",
+		})
+	}
+
+	c.JSON(201, gin.H{
+		"companies": companies,
 	})
 }

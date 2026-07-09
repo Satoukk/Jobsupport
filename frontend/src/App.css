@@ -1,7 +1,7 @@
 body {
   margin: 0;
   background: #fff8f2;
-  font-family: system-ui, sans-serif;
+  font-family: var(--sans);
 }
 
 .app {
@@ -40,13 +40,14 @@ body {
 .statusText h2 {
   margin-bottom: 8px;
   font-size: 32px;
+  font-weight: 700;
   color: #333;
 }
 
 .level {
   margin-bottom: 16px;
   font-size: 44px;
-  font-weight: 800;
+  font-weight: 700;
   color: #ff6ba8;
 }
 
@@ -74,6 +75,7 @@ body {
 .message {
   font-size: 24px;
   line-height: 1.5;
+  font-weight: 600;
   color: #444;
 }
 
@@ -121,4 +123,256 @@ body {
 
 .summaryitem:nth-child(4) {
   background: #ffe18f;
+}
+
+#root > ul {
+  margin: 16px auto 32px;
+  padding: 0;
+  list-style: none;
+}
+
+#root > ul li:empty {
+  display: none;
+}
+
+.searchBox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: min(650px, calc(100% - 48px));
+  min-height: 90px;
+  margin: 28px auto 34px;
+  padding: 0 36px;
+  background: #fff;
+  border: 2px solid #f5cfe2;
+  border-radius: 999px;
+  box-sizing: border-box;
+  box-shadow: 0 4px 14px rgba(255, 214, 232, 0.22);
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background-color 0.18s ease;
+}
+
+.searchBox:focus-within {
+  background: #fffdfd;
+  border-color: #ff9cc7;
+  box-shadow: 0 0 0 4px rgba(255, 156, 199, 0.18);
+}
+
+.searchIcon {
+  flex-shrink: 0;
+  color: #aaa1aa;
+  font-size: 28px;
+  line-height: 1;
+}
+
+.searchBox input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #303033;
+  font: inherit;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.searchBox input::placeholder {
+  color: #aaa1aa;
+  font-weight: 500;
+}
+
+.companyPage {
+  width: 100%;
+  padding-bottom: 24px;
+}
+
+.companyFilters {
+  display: flex;
+  gap: 28px;
+  width: min(650px, calc(100% - 48px));
+  margin: 0 auto 34px;
+}
+
+.filterChip {
+  min-width: 112px;
+  min-height: 58px;
+  padding: 10px 24px;
+  border: 0;
+  border-radius: 999px;
+  background: #ffe18f;
+  color: #303033;
+  font: inherit;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(255, 225, 143, 0.24);
+}
+
+.filterChip:nth-child(2) {
+  background: #b9e8ff;
+  box-shadow: 0 4px 10px rgba(185, 232, 255, 0.28);
+}
+
+.filterChip:nth-child(3) {
+  background: #ffc7df;
+  box-shadow: 0 4px 10px rgba(255, 199, 223, 0.28);
+}
+
+.filterChip.isActive {
+  outline: 4px solid rgba(255, 107, 168, 0.22);
+}
+
+.companyList {
+  display: grid;
+  gap: 26px;
+  width: min(650px, calc(100% - 48px));
+  margin: 0 auto;
+}
+
+.companyCard {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 180px;
+  gap: 24px;
+  min-height: 178px;
+  padding: 34px 40px;
+  background: #fff;
+  border: 2px solid #f5cfe2;
+  border-radius: 38px;
+  box-sizing: border-box;
+}
+
+.companyInfo {
+  text-align: left;
+}
+
+.companyInfo h2 {
+  margin: 0 0 20px;
+  color: #303033;
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.companyInfo p,
+.companyMeta p {
+  margin: 0;
+  color: #858585;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.companyMeta {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: 26px;
+  text-align: center;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 58px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  color: #303033;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.statusBadge.isSelection {
+  background: #b9e8ff;
+}
+
+.statusBadge.isRejected {
+  background: #ffc7df;
+}
+
+.statusBadge.isOffer {
+  background: #b9f3d3;
+}
+
+.companyEmpty {
+  width: min(650px, calc(100% - 48px));
+  margin: 48px auto 0;
+  color: #858585;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .searchBox {
+    width: calc(100% - 28px);
+    min-height: 56px;
+    margin-top: 20px;
+    margin-bottom: 24px;
+    padding-inline: 20px;
+  }
+
+  .searchIcon {
+    font-size: 18px;
+  }
+
+  .searchBox input {
+    font-size: 16px;
+  }
+
+  .companyFilters,
+  .companyList {
+    width: calc(100% - 28px);
+  }
+
+  .companyFilters {
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  .filterChip {
+    min-width: 0;
+    flex: 1;
+    min-height: 44px;
+    padding: 8px 10px;
+    font-size: 15px;
+  }
+
+  .companyList {
+    gap: 16px;
+  }
+
+  .companyCard {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    padding: 24px;
+    border-radius: 28px;
+  }
+
+  .companyInfo h2 {
+    margin-bottom: 12px;
+    font-size: 22px;
+  }
+
+  .companyInfo p,
+  .companyMeta p {
+    font-size: 16px;
+  }
+
+  .companyMeta {
+    align-items: flex-start;
+    gap: 12px;
+    text-align: left;
+  }
+
+  .statusBadge {
+    min-height: 40px;
+    padding-inline: 16px;
+    font-size: 15px;
+  }
 }
