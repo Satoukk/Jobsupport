@@ -1,9 +1,9 @@
 import { useEffect,  useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Header,Footer } from "./App.tsx"
-import "./App.css";
-import "./Header.css";
-import "./Footer.css";
+import '../style/App.css'
+import '../style/Header.css'
+import '../style/Footer.css'
 
 
 function Company(){

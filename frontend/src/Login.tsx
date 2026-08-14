@@ -3,9 +3,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {Header,Footer} from "./App.tsx"
 import supo from "./assets/supo.png"
-import './App.css'
-import './Header.css'
-import './Footer.css'
+import '../style/App.css'
+import '../style/Header.css'
+import '../style/Footer.css'
 
 type Props = {
     name:string;
