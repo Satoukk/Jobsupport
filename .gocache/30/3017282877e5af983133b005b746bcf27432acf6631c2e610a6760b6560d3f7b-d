@@ -1,0 +1,7 @@
+./application.go
+./character.go
+./company.go
+./group_task.go
+./health.go
+./schedule.go
+./user.go

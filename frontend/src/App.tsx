@@ -1,10 +1,9 @@
 import { useState ,useEffect} from 'react'
 import { useNavigate } from "react-router-dom";
 import supo from "./assets/supo.png"
-import '../style/App.css'
-import '../style/Header.css'
-import '../style/Footer.css'
-
+import './style/App.css'
+import './style/Header.css'
+import './style/Footer.css'
 
 type Company = {
   id: number;

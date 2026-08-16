@@ -27,4 +27,7 @@ func RegisterRoutes(r *gin.Engine) {
 	api.POST("/applications", handlers.CreateApp)
 	api.PUT("/applications/:id", handlers.UpdateApplication)
 	api.POST("/group-tasks", handlers.CreateGroupTask)
+	api.POST("/usersemail", handlers.SendEmail)
+	api.PUT("/certification", handlers.Certification)
+	api.GET("/usercertification", handlers.Usercertification)
 }

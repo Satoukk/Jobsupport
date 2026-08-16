@@ -1,77 +1,83 @@
-import { useState ,useEffect} from 'react'
-import axios from "axios";
+import { useState } from 'react'
+import axios from 'axios'
+import { Header, Footer } from './App.tsx'
 import { useNavigate } from "react-router-dom";
-import {Header,Footer} from "./App.tsx"
-import supo from "./assets/supo.png"
-import '../style/App.css'
-import '../style/Header.css'
-import '../style/Footer.css'
+import './style/App.css'
+import './style/Header.css'
+import './style/Footer.css'
 
-type Props = {
-    name:string;
-    email:string;
-    password:string;
+function Login() {
+  return (
+    <div>
+      <Header />
+      <LoginForm />
+      <Footer />
+    </div>
+  )
 }
 
-type User = {
-    ID :  number;
-    UserName :string;
-    Email :string;
-    Password : string;
-}
+function LoginForm() {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [message, setMessage] = useState('')
+  const navigate = useNavigate()
 
-const [error,setError] = useState("");
+  const createUser = async () => {
+    try {
+      const res = await axios.post('http://localhost:8080/api/usersemail', {
+        username: name,
+        email,
+        password,
+      })
+      sessionStorage.setItem('id', String(res.data.id))
+      setMessage('登録しました');
+      navigate("/Certification")
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        setMessage(error.response?.data.error || 'エラーが発生しました')
+        return
+      }
 
-function Login(){
-     return(
-        <div>
-            <Header/>
-            <LoginForm />
-            <Footer/>
-        </div>
-     )
-}
+      if (error instanceof Error) {
+        setMessage(error.message)
+        return
+      }
 
-//入力欄
-function LoginForm(){
-    const [name,setName]=useState("");
-    const [email,setEmail]=useState("");
-    const [password,setPassword]=useState("");
-   
-    return(
-        <>
-        <div>
-            <input type="text" placeholder="ユーザー名を記入してください" onChange={(e)=>setName(e.target.value)}></input>
-            <input type="email" placeholder="メールアドレスを記入してください" onChange={(e)=>setEmail(e.target.value)}></input>
-            <input type="password" placeholder="パスワードを記入してください" onChange={(e)=>setPassword(e.target.value)}></input>
-        </div>
-        <div>
-            <button onClick={()=>CreateUser(name,email,password)}>登録する</button>
-        </div>
-        </>
-    )
-}
-
-//ユーザー登録
-const CreateUser = async(name:string,email:string,password:string)=>{
-    try{
-        const res = await axios.post(`http://localhost:8080/api/users/`,{
-                name,
-                email,
-                password,
-    });
-        sessionStorage.setItem("userid", String(res.data.id));
-        setError("成功しました");
-    }catch(error){
-           if( axios.isAxiosError(error)){
-            setError(error.response?.data.error||"エラーが発生しました")
-            return;
-           }
-           
-           if(error instanceof Error){
-            setError(error.message);
-            return;
-           }
-           setError("予期しないエラー");
+      setMessage('予期しないエラーが発生しました')
     }
+  }
+
+  return (
+    <>
+      <div>
+        <input
+          type="text"
+          placeholder="ユーザー名を入力してください"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <input
+          type="email"
+          placeholder="メールアドレスを入力してください"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="パスワードを入力してください"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+      </div>
+      <div>
+        <button type="button" onClick={createUser}>
+          登録する
+        </button>
+      </div>
+      {message && <p>{message}</p>}
+    </>
+  )
 }
+
+export default Login

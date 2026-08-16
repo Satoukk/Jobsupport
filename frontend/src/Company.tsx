@@ -1,44 +1,40 @@
-import { useEffect,  useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Header,Footer } from "./App.tsx"
-import '../style/App.css'
-import '../style/Header.css'
-import '../style/Footer.css'
+import { useState } from 'react'
+import { Header, Footer } from './App.tsx'
+import './style/App.css'
+import './style/Header.css'
+import './style/Footer.css'
 
+function Company() {
+  const [name, setName] = useState('')
 
-function Company(){
-  const [name,setName]=useState("")
-
-  return(
+  return (
     <div>
-      <Header/>
-      <SearchBox onChange={setName} />
-      <Footer/>
+      <Header />
+      <SearchBox value={name} onChange={setName} />
+      <Footer />
     </div>
   )
 }
 
-const SearchBox=(props:{
-  onChange:(value:string) => void;
-}
-)=>{
-  return(
+function SearchBox({
+  value,
+  onChange,
+}: {
+  value: string
+  onChange: (value: string) => void
+}) {
+  return (
     <div>
-      <input type="search" id="serchBox" onChange={(e)=>props.onChange(e.target.value)} placeholder="企業名" />
-      <button onClick={()=>Serch()}></button>
+      <input
+        type="search"
+        id="searchBox"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder="企業名"
+      />
+      <button type="button">検索</button>
     </div>
   )
 }
 
-
-function  Serch(){
-  const serchresult = async()=>{
-    try{
-        
-    }
-    catch{
-
-    }
-  }
-}
 export default Company
