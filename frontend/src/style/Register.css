@@ -1,0 +1,202 @@
+.registerPage {
+  min-height: 100vh;
+  padding-bottom: 104px;
+  background: #fff8f2;
+}
+
+.registerMain {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 40px 16px 24px;
+  box-sizing: border-box;
+}
+
+.registerPanel {
+  width: min(520px, 100%);
+  padding: 34px 32px;
+  background: #fff;
+  border: 2px solid #f5cfe2;
+  border-radius: 24px;
+  box-shadow: 0 14px 32px rgba(255, 199, 223, 0.22);
+  box-sizing: border-box;
+}
+
+.registerIntro {
+  margin-bottom: 28px;
+  text-align: left;
+}
+
+.registerEyebrow {
+  margin: 0 0 8px;
+  color: #ff6ba8;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.registerIntro h2 {
+  margin: 0 0 10px;
+  color: #303033;
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.registerIntro p:last-child {
+  margin: 0;
+  color: #777;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.7;
+}
+
+.registerFields {
+  display: grid;
+  gap: 18px;
+}
+
+.registerField {
+  display: grid;
+  gap: 8px;
+  text-align: left;
+}
+
+.registerField span {
+  color: #444;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.registerField input {
+  width: 100%;
+  min-height: 52px;
+  padding: 0 16px;
+  color: #303033;
+  background: #fffdfd;
+  border: 2px solid #f5cfe2;
+  border-radius: 14px;
+  box-sizing: border-box;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  outline: 0;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background-color 0.18s ease;
+}
+
+.registerField input::placeholder {
+  color: #b3a8b0;
+  font-weight: 500;
+}
+
+.registerField input:focus {
+  background: #fff;
+  border-color: #ff9cc7;
+  box-shadow: 0 0 0 4px rgba(255, 156, 199, 0.18);
+}
+
+.registerButton {
+  width: 100%;
+  min-height: 54px;
+  margin-top: 26px;
+  padding: 12px 18px;
+  color: #fff;
+  background: #ff6ba8;
+  border: 0;
+  border-radius: 14px;
+  font: inherit;
+  font-size: 17px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 10px 18px rgba(255, 107, 168, 0.24);
+  transition:
+    background-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
+}
+
+.registerButton:hover {
+  background: #f25c9a;
+  box-shadow: 0 12px 22px rgba(255, 107, 168, 0.3);
+  transform: translateY(-1px);
+}
+
+.registerButton:active {
+  transform: translateY(0);
+}
+
+.registerButton:focus-visible {
+  outline: 4px solid rgba(255, 107, 168, 0.24);
+  outline-offset: 3px;
+}
+
+.registerButton:disabled {
+  color: #a49aa2;
+  background: #eee7eb;
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.registerMessage {
+  margin: 18px 0 0;
+  padding: 12px 14px;
+  color: #7a3e5a;
+  background: #fff1f7;
+  border: 1px solid #f5cfe2;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.certificationPanel {
+  max-width: 460px;
+}
+
+.certificationIntro {
+  text-align: center;
+}
+
+.certificationField {
+  justify-items: center;
+}
+
+.certificationField input {
+  max-width: 260px;
+  min-height: 66px;
+  text-align: center;
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+@media (max-width: 480px) {
+  .registerMain {
+    padding: 24px 14px 20px;
+  }
+
+  .registerPanel {
+    padding: 28px 22px;
+    border-radius: 20px;
+  }
+
+  .registerIntro h2 {
+    font-size: 26px;
+  }
+
+  .registerField input,
+  .registerButton {
+    min-height: 50px;
+  }
+
+  .certificationField input {
+    max-width: 100%;
+    min-height: 60px;
+    font-size: 26px;
+  }
+}

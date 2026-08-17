@@ -86,17 +86,11 @@ func LoginUser(c *gin.Context) {
 
 // ユーザー情報取得
 func Usercertification(c *gin.Context) {
-	var req model.User
 	var user model.User
 
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(500, gin.H{
-			"error": "引数がありません",
-		})
-		return
-	}
+	id := c.Query("id")
 
-	if err := database.DB.Where("id = ?", req.ID).
+	if err := database.DB.Where("id = ?", id).
 		Find(&user).Error; err != nil {
 		c.JSON(500, gin.H{
 			"error": "ユーザーがいません",
@@ -131,6 +125,7 @@ func SendEmail(c *gin.Context) {
 		c.JSON(500, gin.H{
 			"error": "データがありません",
 		})
+		return
 	}
 	apiKey := os.Getenv("RESEND_API_KEY")
 	if apiKey == "" {
