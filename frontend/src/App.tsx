@@ -1,6 +1,7 @@
 import { useState ,useEffect} from 'react'
 import { useNavigate } from "react-router-dom";
 import supo from "./assets/supo.png"
+import axios from "axios"
 import './style/App.css'
 import './style/Header.css'
 import './style/Footer.css'
@@ -42,6 +43,13 @@ function App() {
       } finally{
         setLoading(false)
       }
+    }
+    const getcharacter = async () =>{
+        const character = await axios.get('http://localhost:8080/api/character',{
+            params: {
+              id:3,
+            },
+        }) 
     }
     fetchJob();
   },[])

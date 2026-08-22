@@ -6,6 +6,7 @@ import App from './App.tsx'
 import Company from './Company.tsx'
 import Login from './Login.tsx'
 import Certification from './Certification'
+import Register   from    './Register'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -15,6 +16,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/companies" element={<Company />} />        
         <Route path="/Login" element={<Login />} />
         <Route path="/Certification" element={<Certification/>} />
+        <Route path="/Register" element={<Register/>}/>
       </Routes>
     </BrowserRouter>
   </StrictMode>,
