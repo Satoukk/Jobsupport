@@ -47,7 +47,7 @@ function App() {
     const getcharacter = async () =>{
         const character = await axios.get('http://localhost:8080/api/character',{
             params: {
-              id:3,
+              id:1,
             },
         }) 
     }
