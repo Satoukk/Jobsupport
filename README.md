@@ -30,6 +30,7 @@ frontend/
 backend/
 docs/
 
+```
 ##　セットアップ
 cd frontend
 npm install
