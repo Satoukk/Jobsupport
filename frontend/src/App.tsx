@@ -14,10 +14,20 @@ type Company = {
   userid: number;
 };
 
+type Character = {
+  id:number;
+  name:string;
+  level:number;
+  exp:number;
+}
+
 function App() {
+  const navigate = useNavigate();
   const [companys,setCompanys] = useState<Company[]>([]);
   const [err,setError] = useState("");
   const [loading,setLoading] = useState(true);
+  const [character,setCharacter] = useState<Character>()
+  const [userId,setUserId] = useState<number>();
   //const [scheduleAts, setScheduleAts] = useState<string[]>([]);
   const [statusCount] = useState({
   entry:0,
@@ -29,9 +39,13 @@ function App() {
   useEffect(()=>{
     const fetchJob = async () => {
       try {
-  
-          const userid = 1;
-          const res = await fetch(`http://localhost:8080/api/users/${userid}/companies`)
+          const id = sessionStorage.getItem("id");
+          if(id!==null){
+            alert("ログインしてください")
+            navigate("/Register")
+          }
+          setUserId(Number(id))
+          const res = await fetch(`http://localhost:8080/api/users/${userId}/companies`)
           if(!res.ok){
             throw new Error("データ取得に失敗しました")
           }
@@ -44,14 +58,21 @@ function App() {
         setLoading(false)
       }
     }
+
     const getcharacter = async () =>{
+      try{
         const character = await axios.get('http://localhost:8080/api/character',{
             params: {
-              id:1,
+              id:userId,
             },
         }) 
+        setCharacter(character.data);
+    }catch(error){
+        console.error(error);
+    }
     }
     fetchJob();
+    getcharacter();
   },[])
 
   if (loading) {
@@ -65,7 +86,11 @@ function App() {
   return (
     <>
     <Header/>
-    <StatusCard/>
+    {character ? (
+    <StatusCard character={character} />
+    ) : (
+        <p>読み込み中...</p>
+    )}
     <StatusSummary statusCount={statusCount}/>
     <ListSchedule companys={companys}/>
     <Footer/>
@@ -103,8 +128,8 @@ export function Footer(){
   )
 }
 
-function StatusCard() {
-  const exp = 70;
+function StatusCard({character}:{character:Character}) {
+  const exp = character.exp;
   const maxExp = 100;
   const expPercent = (exp / maxExp) * 100;
 
@@ -113,8 +138,8 @@ function StatusCard() {
       <img className="characterImage"src={supo} alt="たべるくん" />
 
       <div className="statusText">
-        <h2>たべるくん</h2>
-        <p className="level">Lv.4</p>
+        <h2>{character.name}</h2>
+        <p className="level">{character.level}</p>
 
         <div className="expBar">
           <div
