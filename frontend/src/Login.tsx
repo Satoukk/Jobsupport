@@ -1,117 +1,72 @@
 import { useState } from 'react'
 import axios from 'axios'
+import { Link, useNavigate } from 'react-router-dom'
 import { Header } from './App.tsx'
-import { useNavigate } from 'react-router-dom'
 import './style/App.css'
 import './style/Header.css'
-import './style/Register.css'
-
-const registerText = {
-  title: '\u65b0\u898f\u767b\u9332',
-  description:
-    '\u30e1\u30fc\u30eb\u8a8d\u8a3c\u30b3\u30fc\u30c9\u3092\u9001\u3063\u3066\u3001\u5c31\u6d3b\u30b5\u30dd\u30fc\u30c8\u3092\u59cb\u3081\u307e\u3059\u3002',
-  userName: '\u30e6\u30fc\u30b6\u30fc\u540d',
-  userNamePlaceholder: '\u5c71\u7530 \u592a\u90ce',
-  email: '\u30e1\u30fc\u30eb\u30a2\u30c9\u30ec\u30b9',
-  password: '\u30d1\u30b9\u30ef\u30fc\u30c9',
-  passwordPlaceholder: '8\u6587\u5b57\u4ee5\u4e0a',
-  submit: '\u8a8d\u8a3c\u30b3\u30fc\u30c9\u3092\u9001\u308b',
-  registered: '\u767b\u9332\u3057\u307e\u3057\u305f',
-  error: '\u30a8\u30e9\u30fc\u304c\u767a\u751f\u3057\u307e\u3057\u305f',
-  unexpectedError:
-    '\u4e88\u671f\u3057\u306a\u3044\u30a8\u30e9\u30fc\u304c\u767a\u751f\u3057\u307e\u3057\u305f',
-}
+import './style/Auth.css'
 
 function Login() {
-  return (
-    <div className="registerPage">
-      <Header />
-      <LoginForm />
-    </div>
-  )
-}
-
-function LoginForm() {
-  const [name, setName] = useState('')
+  const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState('')
-  const navigate = useNavigate()
 
-  const createUser = async () => {
+  const handleLogin = async () => {
     try {
-      const res = await axios.post('http://localhost:8080/api/usersemail', {
-        username: name,
+      const res = await axios.post('http://localhost:8080/api/users/login', {
         email,
         password,
       })
-
-      sessionStorage.setItem('id', String(res.data.id))
-      setMessage(registerText.registered)
-      navigate('/Certification')
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        setMessage(error.response?.data.error || registerText.error)
-        return
+      const rawId = res.data?.id ?? res.data?.user?.id
+      const userId = Number(rawId)
+      if (!Number.isInteger(userId) || userId <= 0) {
+        throw new Error('ログインAPIから有効なユーザーIDが返りませんでした。')
       }
-
-      if (error instanceof Error) {
-        setMessage(error.message)
-        return
-      }
-
-      setMessage(registerText.unexpectedError)
+      sessionStorage.setItem('id', String(userId))
+      navigate('/')
+    } catch {
+      setMessage('メールアドレスまたはパスワードが違います。もう一度お試しください。')
     }
   }
 
   return (
-    <main className="registerMain">
-      <section className="registerPanel" aria-labelledby="register-title">
-        <div className="registerIntro">
-          <p className="registerEyebrow">Account</p>
-          <h2 id="register-title">{registerText.title}</h2>
-          <p>{registerText.description}</p>
-        </div>
+    <div className="authPage">
+      <Header />
+      <main className="authMain">
+        <section className="authPanel" aria-labelledby="login-title">
+          <div className="authIntro">
+            <span className="authEyebrow"><span className="authSparkle">✦</span> MY CAREER, MY PACE</span>
+            <h2 id="login-title">おかえりなさい</h2>
+            <p>あなたの就活の続きから、ゆっくり始めましょう。</p>
+          </div>
 
-        <div className="registerFields">
-          <label className="registerField">
-            <span>{registerText.userName}</span>
-            <input
-              type="text"
-              placeholder={registerText.userNamePlaceholder}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </label>
+          <div className="authFields">
+            <label className="authField">
+              <span>メールアドレス</span>
+              <input type="email" autoComplete="email" placeholder="name@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
+            </label>
+            <label className="authField">
+              <span>パスワード</span>
+              <input type="password" autoComplete="current-password" placeholder="8文字以上" value={password} onChange={(e) => setPassword(e.target.value)} />
+            </label>
+          </div>
 
-          <label className="registerField">
-            <span>{registerText.email}</span>
-            <input
-              type="email"
-              placeholder="name@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </label>
-
-          <label className="registerField">
-            <span>{registerText.password}</span>
-            <input
-              type="password"
-              placeholder={registerText.passwordPlaceholder}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </label>
-        </div>
-
-        <button className="registerButton" type="button" onClick={createUser}>
-          {registerText.submit}
-        </button>
-
-        {message && <p className="registerMessage">{message}</p>}
-      </section>
-    </main>
+          <button className="authButton" type="button" onClick={handleLogin}>ログイン <span aria-hidden="true">→</span></button>
+          {message && <p className="authMessage" role="alert">{message}</p>}
+          <p className="authSwitch">はじめての方はこちら <Link to="/Register">新規登録</Link></p>
+          <div className="authNote"><span aria-hidden="true">☘</span> 小さな一歩も、ちゃんと前進。</div>
+        </section>
+        <aside className="authSide" aria-label="サービスの紹介">
+          <div className="authOrbit authOrbitOne" /><div className="authOrbit authOrbitTwo" />
+          <span className="authSideLabel">YOUR NEXT CHAPTER</span>
+          <div className="authIllustration" aria-hidden="true"><span className="authSun">☀</span><span className="authLeaf">✿</span><span className="authBook">▱</span></div>
+          <h3>就活を、<br />ひとりにしない。</h3>
+          <p>応募も、選考も、あなたのペースで。<br />ここから一緒に進めていこう。</p>
+          <div className="authDots" aria-hidden="true"><i /><i /><i /></div>
+        </aside>
+      </main>
+    </div>
   )
 }
 
