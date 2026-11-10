@@ -3,42 +3,47 @@ package main
 import (
 	"Jobsupport/backend/internal/database"
 	"Jobsupport/backend/internal/routes"
-	"path/filepath"
-	"runtime"
-
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	"log"
+	"net/http"
+	"os"
+	"path/filepath"
+	"strings"
 )
 
 func main() {
-	loadEnv()
-
-	database.Connect()
-	r := gin.Default()
-
-	r.Use(cors.New(cors.Config{
-		AllowOrigins: []string{"http://localhost:5173"},
-		AllowMethods: []string{"GET", "POST", "PUT", "DELETE"},
-		AllowHeaders: []string{"Origin", "Content-Type", "Authorization"},
-	}))
-
-	routes.RegisterRoutes(r)
-
-	r.Run(":8080")
-}
-
-func loadEnv() {
-	_, currentFile, _, ok := runtime.Caller(0)
-	if !ok {
-		_ = godotenv.Load()
-		return
+	_ = godotenv.Load()
+	if err := database.Connect(); err != nil {
+		log.Fatal(err)
 	}
-
-	backendDir := filepath.Clean(filepath.Join(filepath.Dir(currentFile), "..", ".."))
-	_ = godotenv.Load(
-		filepath.Join(backendDir, ".env"),
-		".env",
-		"backend/.env",
-	)
+	r := gin.Default()
+	_ = r.SetTrustedProxies(nil)
+	r.Use(func(c *gin.Context) {
+		c.Header("X-Content-Type-Options", "nosniff")
+		c.Header("Referrer-Policy", "strict-origin-when-cross-origin")
+		c.Next()
+	})
+	origins := os.Getenv("ALLOWED_ORIGINS")
+	if origins == "" {
+		origins = "http://localhost:5173,http://127.0.0.1:5173"
+	}
+	r.Use(cors.New(cors.Config{AllowOrigins: strings.Split(origins, ","), AllowMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}, AllowHeaders: []string{"Content-Type", "Authorization"}}))
+	routes.RegisterRoutes(r)
+	if web := os.Getenv("STATIC_DIR"); web != "" {
+		r.Static("/assets", filepath.Join(web, "assets"))
+		r.NoRoute(func(c *gin.Context) {
+			if c.Request.Method != "GET" || strings.HasPrefix(c.Request.URL.Path, "/api/") || c.Request.URL.Path == "/api" {
+				c.JSON(http.StatusNotFound, gin.H{"error": "ページが見つかりません"})
+				return
+			}
+			c.File(filepath.Join(web, "index.html"))
+		})
+	}
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	log.Fatal(r.Run(":" + port))
 }
